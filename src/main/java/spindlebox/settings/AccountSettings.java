@@ -10,6 +10,8 @@ public interface AccountSettings {
     public Optional<String> getTitle();
     public Optional<String> getHost();
     public Optional<String> getUsername();
+    public Optional<String> getInbox();
+    public Optional<Long> getPollingInterval();
 
     public default Optional<String> getStoredPassword() {
         return Optional.empty();

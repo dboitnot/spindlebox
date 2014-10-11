@@ -34,4 +34,14 @@ public class KvsAccountSettings implements AccountSettings {
     public Optional<String> getStoredPassword() {
         return store.get("password");
     }
+
+    @Override
+    public Optional<String> getInbox() {
+        return store.get("inbox");
+    }
+
+    @Override
+    public Optional<Long> getPollingInterval() {
+        return store.getLong("pollingInterval");
+    }
 }
