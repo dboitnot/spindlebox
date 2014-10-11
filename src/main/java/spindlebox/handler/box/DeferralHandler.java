@@ -28,43 +28,42 @@ public class DeferralHandler implements BoxHandler, Logging {
     public void process(Store store, Folder inbox) throws MessagingException {
         Folder deferredFolder = store.getFolder("Deferred");
         if (deferredFolder.exists()) {
-            for (Folder df : deferredFolder.list()) {
-                long ts;
-                try {
-                    ts = Long.valueOf(df.getName());
-                } catch (Exception ex) {
-                    WARN("Unable to parse deferral folder name '{}'", df.getName());
-                    continue;
-                }
-
-                if (ts <= System.currentTimeMillis()) {
-                    try {
-                        // Process the messages one at a time in case another process is also working in this folder
-                        df.open(Folder.READ_WRITE);
-                        while (df.getMessageCount() > 0) {
-                            Message msg = df.getMessage(1);
-                            DEBUG("Re-inbox-ing deferred message '{}' from folder {}", msg.getSubject(), ts);
-                            msg.setFlag(Flag.SEEN, false);
-                            MailUtils.move(msg, inbox, false);
-                        }
-                        df.close(true);
-
-                        DEBUG("Deleting empty deferral folder {}", ts);
-                        df.delete(false);
-                    } finally {
-                        if (df.isOpen())
-                            df.close(false);
-                    }
-                } else {
-                    DEBUG("Not yet time for deferral folder {}", ts);
-                }
-            }
+            for (Folder df : deferredFolder.list())
+                handleDeferredFolder(df, inbox);
         } else {
             DEBUG("Deferred folder does not exist");
         }
+    }
 
+    private void handleDeferredFolder(Folder df, Folder inbox) throws MessagingException {
+        long ts;
+        try {
+            ts = Long.valueOf(df.getName());
+        } catch (Exception ex) {
+            WARN("Unable to parse deferral folder name '{}'", df.getName());
+            return;
+        }
 
-        // First check for any previously deferred messages
+        if (ts <= System.currentTimeMillis()) {
+            try {
+                // Process the messages one at a time in case another process is also working in this folder
+                df.open(Folder.READ_WRITE);
+                while (df.getMessageCount() > 0) {
+                    Message msg = df.getMessage(1);
+                    DEBUG("Re-inbox-ing deferred message '{}' from folder {}", msg.getSubject(), ts);
+                    msg.setFlag(Flag.SEEN, false);
+                    MailUtils.move(msg, inbox, false);
+                }
+                df.close(true);
 
+                DEBUG("Deleting empty deferral folder {}", ts);
+                df.delete(false);
+            } finally {
+                if (df.isOpen())
+                    df.close(false);
+            }
+        } else {
+            DEBUG("Not yet time for deferral folder {}", ts);
+        }
     }
 }
