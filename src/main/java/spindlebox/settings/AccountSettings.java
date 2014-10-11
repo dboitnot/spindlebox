@@ -11,7 +11,8 @@ public interface AccountSettings {
     public Optional<String> getHost();
     public Optional<String> getUsername();
     public Optional<String> getInbox();
-    public Optional<Long> getPollingInterval();
+    public Optional<Long> getInboxPollingInterval();
+    public Optional<Long> getBoxHandlerPollingInterval();
 
     public default Optional<String> getStoredPassword() {
         return Optional.empty();

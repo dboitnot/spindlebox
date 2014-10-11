@@ -41,7 +41,12 @@ public class KvsAccountSettings implements AccountSettings {
     }
 
     @Override
-    public Optional<Long> getPollingInterval() {
-        return store.getLong("pollingInterval");
+    public Optional<Long> getInboxPollingInterval() {
+        return store.getLong("inboxPollingInterval");
+    }
+
+    @Override
+    public Optional<Long> getBoxHandlerPollingInterval() {
+        return store.getLong("boxHandlerPollingInterval");
     }
 }
