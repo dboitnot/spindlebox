@@ -12,7 +12,19 @@ public interface Logging {
         return LogManager.getLogger(getClass());
     }
 
+    default void DEBUG(String fmt, Object... args) {
+        _logger().debug(fmt, args);
+    }
+
     default void INFO(String fmt, Object... args) {
         _logger().info(fmt, args);
+    }
+
+    default void WARN(String fmt, Object... args) {
+        _logger().warn(fmt, args);
+    }
+
+    default void WARN(String msg, Throwable t) {
+        _logger().warn(msg, t);
     }
 }

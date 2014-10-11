@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="spindlebox" level="info"/>
+        <Logger name="spindlebox" level="debug"/>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
