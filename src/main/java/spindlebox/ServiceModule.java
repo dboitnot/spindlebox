@@ -27,6 +27,8 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);
+        bind(MonitorSession.class).to(MonitorSessionImpl.class);
+
         install(new LoggingModule());
 
         install(new FactoryModuleBuilder()
@@ -41,6 +43,7 @@ public class ServiceModule extends AbstractModule {
             p.load(in);
             return new PropertiesKeyValueStore(p);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -48,9 +51,7 @@ public class ServiceModule extends AbstractModule {
     @Provides
     ChainedPasswordService provideChainedPasswordService() {
         ChainedPasswordService ret = new ChainedPasswordService();
-
         ret.registerProvider(AccountSettings::getStoredPassword);
-
         return ret;
     }
 }
