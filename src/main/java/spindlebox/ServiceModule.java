@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import spindlebox.AccountManager.AccountManagerFactory;
-import spindlebox.logging.LoggingModule;
 import spindlebox.passwords.ChainedPasswordService;
 import spindlebox.passwords.PasswordService;
 import spindlebox.settings.AccountSettings;
@@ -28,8 +27,6 @@ public class ServiceModule extends AbstractModule {
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);
         bind(MonitorSession.class).to(MonitorSessionImpl.class);
-
-        install(new LoggingModule());
 
         install(new FactoryModuleBuilder()
                 .implement(AccountManager.class, AccountManagerImpl.class)
