@@ -14,4 +14,8 @@ public interface AccountSettings {
     public default Optional<String> getStoredPassword() {
         return Optional.empty();
     }
+
+    public default String getLabel() {
+        return getTitle().orElse(String.format("%s@%s", getUsername().orElse("unknown"), getHost().orElse("unknown")));
+    }
 }
