@@ -7,5 +7,9 @@ import spindlebox.settings.AccountSettings;
  * Created by dboitnot on 10/10/14.
  */
 public interface MonitorSession {
-    public void monitor(AccountSettings settings);
+    public static interface MonitorSessionFactory {
+        MonitorSession create(AccountSettings settings);
+    }
+
+    public void start();
 }

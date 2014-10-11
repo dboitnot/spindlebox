@@ -2,6 +2,7 @@ package spindlebox;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import spindlebox.MonitorSession.MonitorSessionFactory;
 import spindlebox.settings.AccountSettings;
 import spindlebox.util.Logging;
 
@@ -16,14 +17,14 @@ import java.util.concurrent.TimeUnit;
 public class AccountManagerImpl implements AccountManager, Logging {
     private final AccountSettings accountSettings;
 
-    private final MonitorSession monitorSession;
+    private final MonitorSessionFactory monitorSessionFactory;
 
     private final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
 
     @Inject
-    public AccountManagerImpl(@Assisted AccountSettings accountSettings, MonitorSession monitorSession) {
+    public AccountManagerImpl(@Assisted AccountSettings accountSettings, MonitorSessionFactory monitorSessionFactory) {
         this.accountSettings = accountSettings;
-        this.monitorSession = monitorSession;
+        this.monitorSessionFactory = monitorSessionFactory;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class AccountManagerImpl implements AccountManager, Logging {
     private void openSession() {
         try {
             // Start a monitoring session
-            monitorSession.monitor(accountSettings);
+            monitorSessionFactory.create(accountSettings).start();
             WARN("Monitor session ended without exception. This isn't supposed to happen.");
         } catch (Exception ex) {
             // Catch any exception so that the pool does not stop retrying.

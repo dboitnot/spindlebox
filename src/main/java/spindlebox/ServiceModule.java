@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import spindlebox.AccountManager.AccountManagerFactory;
+import spindlebox.MonitorSession.MonitorSessionFactory;
 import spindlebox.passwords.ChainedPasswordService;
 import spindlebox.passwords.PasswordService;
 import spindlebox.settings.AccountSettings;
@@ -24,13 +25,16 @@ import java.util.Properties;
 public class ServiceModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(SettingsSource.class).to(KvsSettingsSource.class);
-        bind(PasswordService.class).to(ChainedPasswordService.class);
-        bind(MonitorSession.class).to(MonitorSessionImpl.class);
+        install(new FactoryModuleBuilder()
+                .implement(MonitorSession.class, MonitorSessionImpl.class)
+                .build(MonitorSessionFactory.class));
 
         install(new FactoryModuleBuilder()
                 .implement(AccountManager.class, AccountManagerImpl.class)
                 .build(AccountManagerFactory.class));
+
+        bind(SettingsSource.class).to(KvsSettingsSource.class);
+        bind(PasswordService.class).to(ChainedPasswordService.class);
     }
 
     @Provides @Settings
