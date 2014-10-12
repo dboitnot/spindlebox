@@ -59,7 +59,7 @@ public class MonitorSessionImpl implements MonitorSession {
 
             // Get a Session object
             Session session = Session.getDefaultInstance(prop, null);
-            session.setDebug(true);
+            session.setDebug(settings.isDebug().orElse(false));
 
             // Open the store
             with (session.getStore("imap"), store-> {

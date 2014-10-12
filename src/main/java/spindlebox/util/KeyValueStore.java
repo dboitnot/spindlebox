@@ -9,6 +9,10 @@ public interface KeyValueStore {
         return get(key).map(Long::valueOf);
     }
 
+    public default Optional<Boolean> getBoolean(String key) {
+        return get(key).map(Boolean::valueOf);
+    }
+
     public default KeyValueStore child(String key) {
         return new PrefixedKeyValueStore(this, key + ".");
     }

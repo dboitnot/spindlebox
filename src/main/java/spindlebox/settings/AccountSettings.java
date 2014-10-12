@@ -13,6 +13,7 @@ public interface AccountSettings {
     public Optional<String> getInbox();
     public Optional<Long> getInboxPollingInterval();
     public Optional<Long> getBoxHandlerPollingInterval();
+    public Optional<Boolean> isDebug();
 
     public default Optional<String> getStoredPassword() {
         return Optional.empty();

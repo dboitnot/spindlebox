@@ -49,4 +49,9 @@ public class KvsAccountSettings implements AccountSettings {
     public Optional<Long> getBoxHandlerPollingInterval() {
         return store.getLong("boxHandlerPollingInterval");
     }
+
+    @Override
+    public Optional<Boolean> isDebug() {
+        return store.getBoolean("debug");
+    }
 }
