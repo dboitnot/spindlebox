@@ -7,6 +7,8 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import static spindlebox.util.Logging.*;
 
 /**
@@ -30,12 +32,16 @@ public abstract class DeferralBinHandler implements BoxHandler {
             return;
         }
 
-        String ts = String.valueOf(deferUntil().toEpochMilli());
+        // Truncate timestamp to the minute
+        String ts = String.valueOf(deferUntil()
+                .truncatedTo(ChronoUnit.MINUTES)
+                .toEpochMilli());
         Folder dest = DeferralHandler.getDeferredFolder(store).getFolder(ts);
         src.open(Folder.READ_WRITE);
         try {
             while (src.getMessageCount() > 0) {
                 Message msg = src.getMessage(1);
+                DEBUG("Deferring message to {}: {}", ts, msg.getSubject());
                 MailUtils.move(msg, dest, true);
             }
         } finally {
