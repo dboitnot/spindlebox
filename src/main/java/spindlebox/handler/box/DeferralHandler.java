@@ -1,8 +1,5 @@
 package spindlebox.handler.box;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
-import spindlebox.util.Logging;
 import spindlebox.util.MailUtils;
 
 import javax.mail.Flags.Flag;
@@ -11,11 +8,13 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 
+import static spindlebox.util.Logging.*;
+
 /**
  * spindlebox: DeferralHandler
  * Created by dboitnot on 10/11/14.
  */
-public class DeferralHandler implements BoxHandler, Logging {
+public class DeferralHandler implements BoxHandler {
     @Override
     public void process(Store store, Folder inbox) throws MessagingException {
         Folder deferredFolder = getDeferredFolder(store);

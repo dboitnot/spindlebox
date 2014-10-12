@@ -9,12 +9,13 @@ import spindlebox.util.Logging;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import static spindlebox.util.Logging.*;
 
 /**
  * spindlebox: AccountManagerImpl
  * Created by dboitnot on 10/9/14.
  */
-public class AccountManagerImpl implements AccountManager, Logging {
+public class AccountManagerImpl implements AccountManager {
     private final AccountSettings accountSettings;
 
     private final MonitorSessionFactory monitorSessionFactory;

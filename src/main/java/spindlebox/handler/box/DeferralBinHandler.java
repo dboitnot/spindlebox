@@ -1,6 +1,5 @@
 package spindlebox.handler.box;
 
-import spindlebox.util.Logging;
 import spindlebox.util.MailUtils;
 
 import javax.mail.Folder;
@@ -8,12 +7,13 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 import java.time.Instant;
+import static spindlebox.util.Logging.*;
 
 /**
  * spindlebox: DeferralBinHandler
  * Created by dboitnot on 10/11/14.
  */
-public abstract class DeferralBinHandler implements BoxHandler,Logging {
+public abstract class DeferralBinHandler implements BoxHandler {
     public abstract String getFolderName();
     public abstract Instant deferUntil();
 

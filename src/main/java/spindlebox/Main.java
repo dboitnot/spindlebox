@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import spindlebox.AccountManager.AccountManagerFactory;
 import spindlebox.settings.SettingsSource;
+import static spindlebox.util.Logging.*;
 
 /**
  * spindlebox: Main
@@ -11,6 +12,7 @@ import spindlebox.settings.SettingsSource;
  */
 public class Main {
     public static void main(String[] args) {
+        INFO("Spindlebox starting up...");
         Injector injector = Guice.createInjector(new ServiceModule());
 
         SettingsSource settingsSource = injector.getInstance(SettingsSource.class);

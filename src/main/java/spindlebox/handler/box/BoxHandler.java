@@ -8,6 +8,8 @@ import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 
+import static spindlebox.util.Logging.*;
+
 /**
  * spindlebox: BoxHandler
  * Created by dboitnot on 10/11/14.
@@ -19,6 +21,7 @@ public interface BoxHandler {
         return new AbstractModule() {
             @Override
             protected void configure() {
+                DEBUG("Installing {}", cls);
                 Multibinder<BoxHandler> binder = Multibinder.newSetBinder(binder(), BoxHandler.class);
                 binder.addBinding().to(cls);
             }

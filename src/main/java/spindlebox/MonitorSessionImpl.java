@@ -21,12 +21,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static spindlebox.util.Cleanup.with;
+import static spindlebox.util.Logging.*;
 
 /**
  * spindlebox: MonitorSessionImpl
  * Created by dboitnot on 10/10/14.
  */
-public class MonitorSessionImpl implements MonitorSession, Logging {
+public class MonitorSessionImpl implements MonitorSession {
     private final AccountSettings settings;
     private final PasswordService passwordService;
     private final Set<BoxHandler> boxHandlers;
@@ -45,11 +46,6 @@ public class MonitorSessionImpl implements MonitorSession, Logging {
         this.passwordService = passwordService;
         this.boxHandlers = boxHandlers;
         this.sharedPool = sharedPool;
-    }
-
-    @Override
-    public String getLoggingPrefix() {
-        return settings.getLabel();
     }
 
     @SuppressWarnings("InfiniteLoopStatement")

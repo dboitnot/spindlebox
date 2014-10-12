@@ -2,6 +2,7 @@ package spindlebox.util;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static org.apache.logging.log4j.Level.*;
 
@@ -9,36 +10,47 @@ import static org.apache.logging.log4j.Level.*;
  * spindlebox: Logging
  * Created by dboitnot on 10/11/14.
  */
-public interface Logging {
-    default String getLoggingPrefix() {
-        return null;
+public class Logging {
+    private static StackTraceElement getCaller() {
+        StackTraceElement[] es = Thread.currentThread().getStackTrace();
+        for (int i = 3; i < es.length; i++) {
+            StackTraceElement e = es[i];
+            if (!e.getClassName().equals(Logging.class.getName()))
+                return e;
+        }
+        throw new RuntimeException("called out of thread");
     }
 
-    default void _log(Level lvl, String fmt, Object... args) {
-        LogManager.getLogger(getClass()).log(lvl, _buildLoggingPrefix(getLoggingPrefix()) + fmt, args);
+    private static Logger getLogger() {
+        StackTraceElement caller = getCaller();
+        String cls = caller.getClassName();
+        int dlr = cls.indexOf('$');
+        if (dlr > 0)
+            cls = cls.substring(0, dlr);
+        return LogManager.getLogger(cls);
     }
 
-    default void _log(Level lvl, String msg, Throwable t) {
-        LogManager.getLogger(getClass()).log(lvl, _buildLoggingPrefix(getLoggingPrefix()) + msg, t);
+    public static void log(Level lvl, String fmt, Object... args) {
+        getLogger().log(lvl, fmt, args);
     }
 
-    default void DEBUG(String fmt, Object... args) {
-        _log(DEBUG, fmt, args);
+    public static void log(Level lvl, String msg, Throwable t) {
+        getLogger().log(lvl, msg, t);
     }
 
-    default void INFO(String fmt, Object... args) {
-        _log(INFO, fmt, args);
+    public static void DEBUG(String fmt, Object... args) {
+        log(DEBUG, fmt, args);
     }
 
-    default void WARN(String fmt, Object... args) {
-        _log(WARN, fmt, args);
+    public static void INFO(String fmt, Object... args) {
+        log(INFO, fmt, args);
     }
 
-    default void WARN(String msg, Throwable t) {
-        _log(WARN, msg, t);
+    public static void WARN(String fmt, Object... args) {
+        log(WARN, fmt, args);
     }
 
-    static String _buildLoggingPrefix(String prefix) {
-        return prefix == null ? "" : "<" + prefix + "> ";
+    public static void WARN(String msg, Throwable t) {
+        log(WARN, msg, t);
     }
 }
