@@ -16,14 +16,6 @@ import javax.mail.Store;
  * Created by dboitnot on 10/11/14.
  */
 public class DeferralHandler implements BoxHandler, Logging {
-    public static class Module extends AbstractModule {
-        @Override
-        protected void configure() {
-            Multibinder<BoxHandler> binder = Multibinder.newSetBinder(binder(), BoxHandler.class);
-            binder.addBinding().to(DeferralHandler.class);
-        }
-    }
-
     @Override
     public void process(Store store, Folder inbox) throws MessagingException {
         Folder deferredFolder = getDeferredFolder(store);

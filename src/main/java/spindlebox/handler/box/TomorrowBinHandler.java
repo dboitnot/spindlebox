@@ -15,14 +15,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * Created by dboitnot on 10/11/14.
  */
 public class TomorrowBinHandler extends DeferralBinHandler {
-    public static class Module extends AbstractModule {
-        @Override
-        protected void configure() {
-            Multibinder<BoxHandler> binder = Multibinder.newSetBinder(binder(), BoxHandler.class);
-            binder.addBinding().to(TomorrowBinHandler.class);
-        }
-    }
-
     @Override
     public String getFolderName() {
         return "Tomorrow";
