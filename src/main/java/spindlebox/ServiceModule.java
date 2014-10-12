@@ -7,6 +7,7 @@ import spindlebox.AccountManager.AccountManagerFactory;
 import spindlebox.MonitorSession.MonitorSessionFactory;
 import spindlebox.handler.box.BoxHandler;
 import spindlebox.handler.box.DeferralHandler;
+import spindlebox.handler.box.NextWeekBinHandler;
 import spindlebox.handler.box.TomorrowBinHandler;
 import spindlebox.passwords.ChainedPasswordService;
 import spindlebox.passwords.PasswordService;
@@ -41,6 +42,7 @@ public class ServiceModule extends AbstractModule {
 
         install(BoxHandler.moduleFor(DeferralHandler.class));
         install(BoxHandler.moduleFor(TomorrowBinHandler.class));
+        install(BoxHandler.moduleFor(NextWeekBinHandler.class));
 
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);
