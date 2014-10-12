@@ -6,10 +6,10 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static spindlebox.util.Logging.*;
+import static spindlebox.util.Logging.DEBUG;
 
 /**
  * spindlebox: DeferralBinHandler
@@ -17,7 +17,7 @@ import static spindlebox.util.Logging.*;
  */
 public abstract class DeferralBinHandler implements BoxHandler {
     public abstract String getFolderName();
-    public abstract Instant deferUntil();
+    public abstract LocalDateTime deferUntil();
 
     public String getSigill() {
         return "@";
@@ -33,9 +33,9 @@ public abstract class DeferralBinHandler implements BoxHandler {
         }
 
         // Truncate timestamp to the minute
-        String ts = String.valueOf(deferUntil()
+        String ts = deferUntil()
                 .truncatedTo(ChronoUnit.MINUTES)
-                .toEpochMilli());
+                .toString();
         Folder dest = DeferralHandler.getDeferredFolder(store).getFolder(ts);
         src.open(Folder.READ_WRITE);
         try {

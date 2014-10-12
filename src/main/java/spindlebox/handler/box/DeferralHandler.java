@@ -8,6 +8,8 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 
+import java.time.LocalDateTime;
+
 import static spindlebox.util.Logging.*;
 
 /**
@@ -27,15 +29,15 @@ public class DeferralHandler implements BoxHandler {
     }
 
     private void handleDeferredFolder(Folder df, Folder inbox) throws MessagingException {
-        long ts;
+        LocalDateTime ts;
         try {
-            ts = Long.valueOf(df.getName());
+            ts = LocalDateTime.parse(df.getName());
         } catch (Exception ex) {
             WARN("Unable to parse deferral folder name '{}'", df.getName());
             return;
         }
 
-        if (ts <= System.currentTimeMillis()) {
+        if (!ts.isAfter(LocalDateTime.now())) {
             try {
                 // Process the messages one at a time in case another process is also working in this folder
                 df.open(Folder.READ_WRITE);

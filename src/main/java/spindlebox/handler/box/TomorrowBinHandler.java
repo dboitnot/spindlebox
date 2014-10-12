@@ -1,10 +1,6 @@
 package spindlebox.handler.box;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
@@ -21,11 +17,10 @@ public class TomorrowBinHandler extends DeferralBinHandler {
     }
 
     @Override
-    public Instant deferUntil() {
-        return OffsetDateTime.now()
+    public LocalDateTime deferUntil() {
+        return LocalDateTime.now()
                 .with(HOUR_OF_DAY, 7)
                 .with(MINUTE_OF_HOUR, 0)
-                .plus(1, DAYS)
-                .toInstant();
+                .plus(1, DAYS);
     }
 }
