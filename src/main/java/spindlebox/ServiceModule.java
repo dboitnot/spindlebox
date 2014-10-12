@@ -6,6 +6,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import spindlebox.AccountManager.AccountManagerFactory;
 import spindlebox.MonitorSession.MonitorSessionFactory;
 import spindlebox.handler.box.DeferralHandler;
+import spindlebox.handler.box.TomorrowBinHandler;
 import spindlebox.passwords.ChainedPasswordService;
 import spindlebox.passwords.PasswordService;
 import spindlebox.settings.AccountSettings;
@@ -38,6 +39,7 @@ public class ServiceModule extends AbstractModule {
                 .build(AccountManagerFactory.class));
 
         install(new DeferralHandler.Module());
+        install(new TomorrowBinHandler.Module());
 
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);

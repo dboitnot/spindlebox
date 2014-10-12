@@ -26,7 +26,7 @@ public class DeferralHandler implements BoxHandler, Logging {
 
     @Override
     public void process(Store store, Folder inbox) throws MessagingException {
-        Folder deferredFolder = store.getFolder("Deferred");
+        Folder deferredFolder = getDeferredFolder(store);
         if (deferredFolder.exists()) {
             for (Folder df : deferredFolder.list())
                 handleDeferredFolder(df, inbox);
@@ -65,5 +65,9 @@ public class DeferralHandler implements BoxHandler, Logging {
         } else {
             DEBUG("Not yet time for deferral folder {}", ts);
         }
+    }
+
+    public static Folder getDeferredFolder(Store store) throws MessagingException {
+        return store.getFolder("Deferred");
     }
 }
