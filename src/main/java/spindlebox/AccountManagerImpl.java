@@ -44,6 +44,9 @@ public class AccountManagerImpl implements AccountManager, Logging {
             // Start a monitoring session
             monitorSessionFactory.create(accountSettings).start();
             WARN("Monitor session ended without exception. This isn't supposed to happen.");
+        } catch (MonitorSession.FatalSessionException ex) {
+            WARN("Fatal session exception. Shutting down account monitor.", ex);
+            shutdown();
         } catch (Exception ex) {
             // Catch any exception so that the pool does not stop retrying.
             WARN("Monitor session ended unexpectedly", ex);

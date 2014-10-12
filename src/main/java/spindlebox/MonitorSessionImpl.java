@@ -105,6 +105,8 @@ public class MonitorSessionImpl implements MonitorSession, Logging {
             });
         } catch (NoSuchProviderException e) {
             throw new FatalSessionException(e);
+        } catch (FatalSessionException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Unexpected exception for session: " + settings.getLabel(), e);
         }
