@@ -17,8 +17,8 @@ public class TomorrowBinHandler extends DeferralBinHandler {
     }
 
     @Override
-    public LocalDateTime deferUntil() {
-        return LocalDateTime.now()
+    public LocalDateTime deferUntil(LocalDateTime from) {
+        return from
                 .with(HOUR_OF_DAY, 7)
                 .with(MINUTE_OF_HOUR, 0)
                 .plus(1, DAYS);
