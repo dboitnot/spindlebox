@@ -9,8 +9,10 @@ import spindlebox.handler.box.BoxHandler;
 import spindlebox.handler.box.DeferralHandler;
 import spindlebox.handler.box.NextWeekBinHandler;
 import spindlebox.handler.box.TomorrowBinHandler;
+import spindlebox.passwords.AccountSettingsPasswordSource;
 import spindlebox.passwords.ChainedPasswordService;
 import spindlebox.passwords.PasswordService;
+import spindlebox.passwords.PasswordSource;
 import spindlebox.settings.AccountSettings;
 import spindlebox.settings.KvsSettingsSource;
 import spindlebox.settings.Settings;
@@ -44,6 +46,8 @@ public class ServiceModule extends AbstractModule {
         install(BoxHandler.moduleFor(TomorrowBinHandler.class));
         install(BoxHandler.moduleFor(NextWeekBinHandler.class));
 
+        install(PasswordSource.moduleFor(AccountSettingsPasswordSource.class));
+
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);
 
@@ -62,12 +66,5 @@ public class ServiceModule extends AbstractModule {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-    @Provides
-    ChainedPasswordService provideChainedPasswordService() {
-        ChainedPasswordService ret = new ChainedPasswordService();
-        ret.registerProvider(AccountSettings::getStoredPassword);
-        return ret;
     }
 }
