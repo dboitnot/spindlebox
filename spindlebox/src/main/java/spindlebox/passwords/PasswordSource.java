@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import static spindlebox.util.Logging.*;
 
 public interface PasswordSource {
-    public PasswordSupplier getPasswordSupplier(AccountSettings settings);
+    public Supplier<Optional<String>> getPasswordSupplier(AccountSettings settings);
 
     static <T extends PasswordSource> Module moduleFor(Class<T> cls) {
         return new AbstractModule() {

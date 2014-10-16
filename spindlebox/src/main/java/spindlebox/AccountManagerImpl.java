@@ -9,6 +9,8 @@ import spindlebox.util.Logging;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static spindlebox.util.Logging.*;
 
 /**
@@ -16,6 +18,9 @@ import static spindlebox.util.Logging.*;
  * Created by dboitnot on 10/9/14.
  */
 public class AccountManagerImpl implements AccountManager {
+    private static final long RETRY_DELAY = 1;
+    private static final TimeUnit RETRY_DELAY_UNIT = MINUTES;
+
     private final AccountSettings accountSettings;
 
     private final MonitorSessionFactory monitorSessionFactory;
@@ -31,7 +36,7 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public void start() {
         INFO("Starting: {}", accountSettings.getLabel());
-        pool.scheduleWithFixedDelay(this::openSession, 0, 1, TimeUnit.MINUTES);
+        pool.scheduleWithFixedDelay(this::openSession, 0, RETRY_DELAY, RETRY_DELAY_UNIT);
     }
 
     @Override
@@ -51,6 +56,7 @@ public class AccountManagerImpl implements AccountManager {
         } catch (Exception ex) {
             // Catch any exception so that the pool does not stop retrying.
             WARN("Monitor session ended unexpectedly", ex);
+            INFO("Monitor session will restart in {} {}", RETRY_DELAY, RETRY_DELAY_UNIT);
         }
     }
 }

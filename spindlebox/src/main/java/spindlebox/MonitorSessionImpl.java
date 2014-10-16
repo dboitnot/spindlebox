@@ -66,16 +66,19 @@ public class MonitorSessionImpl implements MonitorSession {
                 String host = settings.getHost().orElseThrow(() -> new FatalSessionException("host not configured"));
                 String user = settings.getUsername().orElseThrow(() -> new FatalSessionException("username not configured"));
 
-                passwordService.applyPassword(settings, pw -> {
+                if (passwordService.applyPassword(settings, pw -> {
                     try {
                         DEBUG("Attempting to connect to {} as {}", host, user);
                         store.connect(host, user, pw);
-                        return true;
+                        return store.isConnected();
                     } catch (MessagingException ex) {
                         return false;
                     }
-                });
-                DEBUG("Connected");
+                })) {
+                    DEBUG("Connected");
+                } else {
+                    throw new FatalSessionException("no more passwords to try, giving up");
+                }
 
                 // Open the inbox
                 String inboxName = settings.getInbox().orElse("INBOX");

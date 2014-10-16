@@ -9,10 +9,7 @@ import spindlebox.handler.box.BoxHandler;
 import spindlebox.handler.box.DeferralHandler;
 import spindlebox.handler.box.NextWeekBinHandler;
 import spindlebox.handler.box.TomorrowBinHandler;
-import spindlebox.passwords.AccountSettingsPasswordSource;
-import spindlebox.passwords.ChainedPasswordService;
-import spindlebox.passwords.PasswordService;
-import spindlebox.passwords.PasswordSource;
+import spindlebox.passwords.*;
 import spindlebox.settings.AccountSettings;
 import spindlebox.settings.KvsSettingsSource;
 import spindlebox.settings.Settings;
@@ -47,6 +44,7 @@ public class ServiceModule extends AbstractModule {
         install(BoxHandler.moduleFor(NextWeekBinHandler.class));
 
         install(PasswordSource.moduleFor(AccountSettingsPasswordSource.class));
+        install(PasswordSource.moduleFor(KeyringPasswordSource.class));
 
         bind(SettingsSource.class).to(KvsSettingsSource.class);
         bind(PasswordService.class).to(ChainedPasswordService.class);
