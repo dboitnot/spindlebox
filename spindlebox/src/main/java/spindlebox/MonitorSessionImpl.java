@@ -6,7 +6,6 @@ import com.sun.mail.imap.IMAPFolder;
 import spindlebox.handler.box.BoxHandler;
 import spindlebox.passwords.PasswordService;
 import spindlebox.settings.AccountSettings;
-import spindlebox.util.Logging;
 import spindlebox.util.Shared;
 
 import javax.mail.*;
@@ -77,7 +76,8 @@ public class MonitorSessionImpl implements MonitorSession {
                 })) {
                     DEBUG("Connected");
                 } else {
-                    throw new FatalSessionException("no more passwords to try, giving up");
+                    return;
+                    //throw new FatalSessionException("no more passwords to try, giving up");
                 }
 
                 // Open the inbox
