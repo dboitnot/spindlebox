@@ -2,10 +2,12 @@ package spindlebox.handler.box;
 
 import spindlebox.util.MailUtils;
 
-import javax.mail.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Store;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Enumeration;
 
 import static spindlebox.util.Logging.DEBUG;
 
@@ -28,6 +30,8 @@ public abstract class DeferralBinHandler implements BoxHandler {
         if (!src.exists()) {
             DEBUG("Deferral bin doesn't exist: {}", folderName);
             return;
+        } else {
+            DEBUG("Processing deferral bin: {}", folderName);
         }
 
         // Truncate timestamp to the minute

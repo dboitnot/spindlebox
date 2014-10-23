@@ -5,12 +5,8 @@ import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import spindlebox.AccountManager.AccountManagerFactory;
 import spindlebox.MonitorSession.MonitorSessionFactory;
-import spindlebox.handler.box.BoxHandler;
-import spindlebox.handler.box.DeferralHandler;
-import spindlebox.handler.box.NextWeekBinHandler;
-import spindlebox.handler.box.TomorrowBinHandler;
+import spindlebox.handler.box.*;
 import spindlebox.passwords.*;
-import spindlebox.settings.AccountSettings;
 import spindlebox.settings.KvsSettingsSource;
 import spindlebox.settings.Settings;
 import spindlebox.settings.SettingsSource;
@@ -40,6 +36,7 @@ public class ServiceModule extends AbstractModule {
                 .build(AccountManagerFactory.class));
 
         install(BoxHandler.moduleFor(DeferralHandler.class));
+        install(BoxHandler.moduleFor(SnoozeBinHandler.class));
         install(BoxHandler.moduleFor(TomorrowBinHandler.class));
         install(BoxHandler.moduleFor(NextWeekBinHandler.class));
 
