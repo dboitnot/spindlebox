@@ -6,6 +6,7 @@ import com.sun.mail.imap.IMAPFolder;
 import spindlebox.handler.box.BoxHandler;
 import spindlebox.passwords.PasswordService;
 import spindlebox.settings.AccountSettings;
+import spindlebox.ui.StateMonitor;
 import spindlebox.util.Shared;
 
 import javax.mail.*;
@@ -19,6 +20,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import static spindlebox.ui.StateMonitor.State.*;
 import static spindlebox.util.Cleanup.with;
 import static spindlebox.util.Logging.*;
 
@@ -31,6 +33,7 @@ public class MonitorSessionImpl implements MonitorSession {
     private final PasswordService passwordService;
     private final Set<BoxHandler> boxHandlers;
     private final ScheduledExecutorService sharedPool;
+    private final StateMonitor stateMonitor;
 
     private Optional<Boolean> supportsIdle = Optional.empty();
 
@@ -39,12 +42,14 @@ public class MonitorSessionImpl implements MonitorSession {
             @Assisted AccountSettings settings,
             PasswordService passwordService,
             Set<BoxHandler> boxHandlers,
-            @Shared ScheduledExecutorService sharedPool)
+            @Shared ScheduledExecutorService sharedPool,
+            StateMonitor stateMonitor)
     {
         this.settings = settings;
         this.passwordService = passwordService;
         this.boxHandlers = boxHandlers;
         this.sharedPool = sharedPool;
+        this.stateMonitor = stateMonitor;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -52,6 +57,7 @@ public class MonitorSessionImpl implements MonitorSession {
     public void start() throws FatalSessionException {
         try {
             DEBUG("Starting session");
+            stateMonitor.stateChanged(CONNECTING);
 
             Properties prop = new Properties();
             prop.setProperty("mail.imap.starttls.enable", "true");
@@ -81,6 +87,7 @@ public class MonitorSessionImpl implements MonitorSession {
                 }
 
                 // Open the inbox
+                stateMonitor.stateChanged(PROCESSING);
                 String inboxName = settings.getInbox().orElse("INBOX");
                 Folder inbox = store.getFolder(inboxName);
                 if (inbox == null || !inbox.exists())
@@ -89,6 +96,7 @@ public class MonitorSessionImpl implements MonitorSession {
                 addMessageHandler(inbox, this::handleInboxMessage);
 
                 while (true) {
+                    stateMonitor.stateChanged(PROCESSING);
                     // Let the box handlers do their thing before idling.
                     boxHandlers.forEach(h -> {
                         try {
@@ -103,6 +111,7 @@ public class MonitorSessionImpl implements MonitorSession {
                     });
 
                     // Wait for new new messages to arrive in the inbox and handle them.
+                    stateMonitor.stateChanged(WAITING);
                     idle(inbox);
                 }
             });
@@ -110,8 +119,10 @@ public class MonitorSessionImpl implements MonitorSession {
             throw new FatalSessionException(e);
         } catch (FatalSessionException e) {
             throw e;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException("Unexpected exception for session: " + settings.getLabel(), e);
+        } finally {
+            stateMonitor.stateChanged(PROBLEM);
         }
     }
 

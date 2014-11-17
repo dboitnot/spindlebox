@@ -2,3 +2,5 @@
 target
 spindlebox_test_settings.properties
 dependency-reduced-pom.xml
+nohup.out
+spindlebox.log

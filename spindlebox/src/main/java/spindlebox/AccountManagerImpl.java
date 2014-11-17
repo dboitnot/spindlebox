@@ -4,14 +4,16 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import spindlebox.MonitorSession.MonitorSessionFactory;
 import spindlebox.settings.AccountSettings;
-import spindlebox.util.Logging;
+import spindlebox.ui.StateMonitor;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static spindlebox.util.Logging.*;
+import static spindlebox.ui.StateMonitor.State.DISCONNECTED;
+import static spindlebox.util.Logging.INFO;
+import static spindlebox.util.Logging.WARN;
 
 /**
  * spindlebox: AccountManagerImpl
@@ -22,20 +24,24 @@ public class AccountManagerImpl implements AccountManager {
     private static final TimeUnit RETRY_DELAY_UNIT = MINUTES;
 
     private final AccountSettings accountSettings;
-
     private final MonitorSessionFactory monitorSessionFactory;
-
     private final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
+    private final StateMonitor stateMonitor;
 
     @Inject
-    public AccountManagerImpl(@Assisted AccountSettings accountSettings, MonitorSessionFactory monitorSessionFactory) {
+    public AccountManagerImpl(@Assisted AccountSettings accountSettings,
+                              MonitorSessionFactory monitorSessionFactory,
+                              StateMonitor stateMonitor)
+    {
         this.accountSettings = accountSettings;
         this.monitorSessionFactory = monitorSessionFactory;
+        this.stateMonitor = stateMonitor;
     }
 
     @Override
     public void start() {
         INFO("Starting: {}", accountSettings.getLabel());
+        stateMonitor.stateChanged(DISCONNECTED);
         pool.scheduleWithFixedDelay(this::openSession, 0, RETRY_DELAY, RETRY_DELAY_UNIT);
     }
 

@@ -10,6 +10,10 @@ import spindlebox.passwords.*;
 import spindlebox.settings.KvsSettingsSource;
 import spindlebox.settings.Settings;
 import spindlebox.settings.SettingsSource;
+import spindlebox.ui.Look;
+import spindlebox.ui.LookImpl;
+import spindlebox.ui.StateMonitor;
+import spindlebox.ui.tray.TrayManager;
 import spindlebox.util.KeyValueStore;
 import spindlebox.util.PropertiesKeyValueStore;
 import spindlebox.util.Shared;
@@ -49,6 +53,9 @@ public class ServiceModule extends AbstractModule {
         bind(ScheduledExecutorService.class)
                 .annotatedWith(Shared.class)
                 .toInstance(Executors.newScheduledThreadPool(1));
+
+        bind(StateMonitor.class).to(TrayManager.class);
+        bind(Look.class).to(LookImpl.class);
     }
 
     @Provides @Settings
