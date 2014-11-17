@@ -94,6 +94,10 @@ public class MonitorSessionImpl implements MonitorSession {
                         try {
                             h.process(store, inbox);
                         } catch (MessagingException e) {
+                            if (e.getCause() instanceof StoreClosedException) {
+                                WARN("Store closed unexpectedly.");
+                                return;
+                            }
                             WARN("error in boxHandler {}", h.getClass(), e);
                         }
                     });
