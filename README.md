@@ -1,0 +1,4 @@
+spindlebox
+==========
+
+Private mail snoozing
