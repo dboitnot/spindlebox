@@ -3,6 +3,7 @@ package spindlebox.ui.tray;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import spindlebox.ui.Look;
+import spindlebox.ui.MenuBuilder;
 import spindlebox.ui.StateMonitor;
 
 import javax.imageio.ImageIO;
@@ -24,7 +25,7 @@ public class TrayManager implements StateMonitor {
     private final Look look;
 
     @Inject
-    public TrayManager(Look look) {
+    public TrayManager(Look look, MenuBuilder menuBuilder) {
         this.look = look;
 
         // If system tray icons aren't supported, don't initialize anything.
@@ -42,6 +43,11 @@ public class TrayManager implements StateMonitor {
 
             DEBUG("Adding tray icon");
             trayIcon = new TrayIcon(defaultImage, "Spindlebox");
+
+            PopupMenu popup = new PopupMenu("Spindlebox");
+            menuBuilder.build(popup);
+            trayIcon.setPopupMenu(popup);
+
             SystemTray.getSystemTray().add(trayIcon);
         } catch (AWTException e) {
             throw new RuntimeException(e);
