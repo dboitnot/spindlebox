@@ -24,6 +24,8 @@
             <artifactId>javax.mail</artifactId>
             <version>1.5.2</version>
         </dependency>
+
+        <!-- Guice 3.0
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
@@ -39,6 +41,26 @@
             <artifactId>guice-multibindings</artifactId>
             <version>3.0</version>
         </dependency>
+        -->
+
+        <!-- Guice 4.0 -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.0-beta5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>4.0-beta5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-multibindings</artifactId>
+            <version>4.0-beta5</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
