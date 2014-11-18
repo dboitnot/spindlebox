@@ -55,7 +55,6 @@ public class ServiceModule extends AbstractModule {
                 .toInstance(Executors.newScheduledThreadPool(1));
 
         bind(StateMonitor.class).to(TrayManager.class);
-        bind(Look.class).to(LookImpl.class);
     }
 
     @Provides @Settings
