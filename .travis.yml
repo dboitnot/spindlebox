@@ -2,3 +2,11 @@ language: java
 
 jdk:
   - oraclejdk8
+
+deploy:
+  provider: releases
+  api_key:
+    secure: WSZbbmvTcl4BzPCbBCE+HzZTRI9pFP3nXAePmaPNiOJk8mnJW18JjuNm8iLTDe0LUDMPDnXvBRKhgKk8VUwkBebrjywZsRkzjrQ7Ci5R8KOrLhgNNpuUG0x5PKlLZtpE1PFT9SEHOooPgtfCrN6MX8tXyfW33zom2vlrEGAuTPM=
+  file: spindlebox/target/spindlebox-1.0-SNAPSHOT.jar
+  on:
+    repo: dboitnot/spindlebox
