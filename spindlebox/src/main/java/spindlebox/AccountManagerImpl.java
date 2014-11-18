@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static spindlebox.ui.StateMonitor.State.DISCONNECTED;
 import static spindlebox.util.Logging.INFO;
 import static spindlebox.util.Logging.WARN;
@@ -49,6 +50,9 @@ public class AccountManagerImpl implements AccountManager {
     public void shutdown() {
         INFO("Stopping account manager for {}", accountSettings.getLabel());
         pool.shutdownNow();
+        try {
+            pool.awaitTermination(30, SECONDS);
+        } catch (InterruptedException ignored) {}
     }
 
     private void openSession() {
