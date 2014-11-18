@@ -12,14 +12,8 @@ import static spindlebox.util.Logging.*;
  */
 public class Main {
     public static void main(String[] args) {
-        INFO("Spindlebox starting up...");
+        DEBUG("Initializing Guice");
         Injector injector = Guice.createInjector(new ServiceModule());
-
-        SettingsSource settingsSource = injector.getInstance(SettingsSource.class);
-
-        settingsSource.getAccounts().forEach(accountSettings -> injector
-                .getInstance(AccountManagerFactory.class)
-                .create(accountSettings)
-                .start());
+        injector.getInstance(AppControl.class).startup();
     }
 }
