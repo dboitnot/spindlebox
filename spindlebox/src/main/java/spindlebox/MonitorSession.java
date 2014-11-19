@@ -2,6 +2,9 @@ package spindlebox;
 
 import spindlebox.settings.AccountSettings;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * spindlebox: MonitorSession
  * Created by dboitnot on 10/10/14.
@@ -25,5 +28,5 @@ public interface MonitorSession {
         }
     }
 
-    public void start() throws FatalSessionException;
+    public void start(AtomicReference<Optional<Runnable>> closeHandle) throws FatalSessionException;
 }

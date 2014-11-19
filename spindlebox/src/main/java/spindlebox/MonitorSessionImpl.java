@@ -12,12 +12,15 @@ import spindlebox.util.Shared;
 import javax.mail.*;
 import javax.mail.event.MessageCountAdapter;
 import javax.mail.event.MessageCountEvent;
+import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import static spindlebox.ui.StateMonitor.State.*;
@@ -54,7 +57,7 @@ public class MonitorSessionImpl implements MonitorSession {
 
     @SuppressWarnings("InfiniteLoopStatement")
     @Override
-    public void start() throws FatalSessionException {
+    public void start(AtomicReference<Optional<Runnable>> closeHandle) throws FatalSessionException {
         try {
             DEBUG("Starting session");
             stateMonitor.stateChanged(CONNECTING);
@@ -86,6 +89,21 @@ public class MonitorSessionImpl implements MonitorSession {
                     //throw new FatalSessionException("no more passwords to try, giving up");
                 }
 
+                // Set up the close handle
+                final WeakReference<Store> storeWeakReference = new WeakReference<>(store);
+                final AtomicBoolean shuttingDown = new AtomicBoolean(false);
+                closeHandle.set(Optional.of(() -> {
+                    shuttingDown.set(true);
+                    Store s = storeWeakReference.get();
+                    if (s == null)
+                        return;
+                    try {
+                        s.close();
+                    } catch (MessagingException e) {
+                        INFO("Error closing store", e);
+                    }
+                }));
+
                 // Open the inbox
                 stateMonitor.stateChanged(PROCESSING);
                 String inboxName = settings.getInbox().orElse("INBOX");
@@ -95,7 +113,7 @@ public class MonitorSessionImpl implements MonitorSession {
                 inbox.open(Folder.READ_WRITE);
                 addMessageHandler(inbox, this::handleInboxMessage);
 
-                while (true) {
+                while (!shuttingDown.get()) {
                     stateMonitor.stateChanged(PROCESSING);
                     // Let the box handlers do their thing before idling.
                     boxHandlers.forEach(h -> {
