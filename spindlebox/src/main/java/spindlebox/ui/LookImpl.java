@@ -3,7 +3,7 @@ package spindlebox.ui;
 public class LookImpl implements Look {
     @Override
     public String getThemeName() {
-        return "grey";
+        return "white";
     }
 
     @Override

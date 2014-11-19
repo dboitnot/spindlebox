@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static spindlebox.ui.StateMonitor.State.PROCESSING;
+import static spindlebox.ui.StateMonitor.State.*;
 import static spindlebox.util.Logging.DEBUG;
 import static spindlebox.util.Logging.INFO;
 
@@ -39,7 +39,11 @@ public class TrayManager implements StateMonitor {
         try {
             DEBUG("Loading images");
             defaultImage = imageNamed("default");
-            stateImages.put(PROCESSING, imageNamed("arrow"));
+            stateImages.put(DISCONNECTED, imageNamed("yellow"));
+            stateImages.put(CONNECTING, imageNamed("green"));
+            stateImages.put(PROCESSING, imageNamed("green"));
+            stateImages.put(PROBLEM, imageNamed("red"));
+            stateImages.put(SHUTTING_DOWN, imageNamed("yellow"));
 
             DEBUG("Adding tray icon");
             trayIcon = new TrayIcon(defaultImage, "Spindlebox");
