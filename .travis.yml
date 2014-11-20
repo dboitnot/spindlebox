@@ -11,6 +11,9 @@ deploy:
   bucket: "S3 Bucket"
   skip_cleanup: true
   local-dir: deploy/web
+  detect_encoding: true
+  before_deploy:
+    - scripts/build_web.sh
 
 #deploy:
 #  provider: releases
