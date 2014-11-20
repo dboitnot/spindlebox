@@ -4,9 +4,18 @@ jdk:
   - oraclejdk8
 
 deploy:
-  provider: releases
-  api_key:
-    secure: WSZbbmvTcl4BzPCbBCE+HzZTRI9pFP3nXAePmaPNiOJk8mnJW18JjuNm8iLTDe0LUDMPDnXvBRKhgKk8VUwkBebrjywZsRkzjrQ7Ci5R8KOrLhgNNpuUG0x5PKlLZtpE1PFT9SEHOooPgtfCrN6MX8tXyfW33zom2vlrEGAuTPM=
-  file: spindlebox/target/spindlebox-1.0-SNAPSHOT.jar
-  on:
-    repo: dboitnot/spindlebox
+  provider: s3
+  access_key_id: "AKIAJXHKJ4WDCUDV7TFA"
+  secret_access_key:
+      secure: YbkPy9qziId1WEQfdXLqpEkCnJ50ERWNQOM2qkkIf1JrK5COMRYNOOZpm97O7I0EP62JxU2PbVtLm2kxos8A1fS4p8JpXtkZ/BD00COeprWTFWP9GpMuid8PzOL8BJxO6WgVwX2mDeXJA80oFU9wGtKVLJoxhlJmFvd7nYbM7rA=
+  bucket: "S3 Bucket"
+  skip_cleanup: true
+  local-dir: deploy/web
+
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure: WSZbbmvTcl4BzPCbBCE+HzZTRI9pFP3nXAePmaPNiOJk8mnJW18JjuNm8iLTDe0LUDMPDnXvBRKhgKk8VUwkBebrjywZsRkzjrQ7Ci5R8KOrLhgNNpuUG0x5PKlLZtpE1PFT9SEHOooPgtfCrN6MX8tXyfW33zom2vlrEGAuTPM=
+#  file: spindlebox/target/spindlebox-1.0-SNAPSHOT.jar
+#  on:
+#    repo: dboitnot/spindlebox
