@@ -3,16 +3,20 @@ language: java
 jdk:
   - oraclejdk8
 
+after_success:
+  - mvn package -pl spindlebox -am
+
 before_deploy:
   - mkdir -p deploy/web
   - cp -frv web/* deploy/web
+  - cp spindlebox/target/spindlebox-1.0-SNAPSHOT.jar deploy/web
 
 deploy:
   provider: s3
   access_key_id: "AKIAJXHKJ4WDCUDV7TFA"
   secret_access_key:
       secure: YbkPy9qziId1WEQfdXLqpEkCnJ50ERWNQOM2qkkIf1JrK5COMRYNOOZpm97O7I0EP62JxU2PbVtLm2kxos8A1fS4p8JpXtkZ/BD00COeprWTFWP9GpMuid8PzOL8BJxO6WgVwX2mDeXJA80oFU9wGtKVLJoxhlJmFvd7nYbM7rA=
-  bucket: "arn:aws:s3:::spindlebox.lclinux.org"
+  bucket: "spindlebox.lclinux.org"
   skip_cleanup: true
   local-dir: deploy/web
   detect_encoding: true
