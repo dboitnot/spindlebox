@@ -2,6 +2,7 @@ package spindlebox.settings;
 
 import spindlebox.util.KeyValueStore;
 
+import java.time.Duration;
 import java.util.Optional;
 
 /**
@@ -41,17 +42,22 @@ public class KvsAccountSettings implements AccountSettings {
     }
 
     @Override
-    public Optional<Long> getInboxPollingInterval() {
-        return store.getLong("inboxPollingInterval");
+    public Optional<Duration> getInboxPollingInterval() {
+        return store.getDuration("inboxPollingInterval");
     }
 
     @Override
-    public Optional<Long> getBoxHandlerPollingInterval() {
-        return store.getLong("boxHandlerPollingInterval");
+    public Optional<Duration> getBoxHandlerPollingInterval() {
+        return store.getDuration("boxHandlerPollingInterval");
     }
 
     @Override
     public Optional<Boolean> isDebug() {
         return store.getBoolean("debug");
+    }
+
+    @Override
+    public Optional<Duration> getTimeout() {
+        return store.getDuration("timeout");
     }
 }

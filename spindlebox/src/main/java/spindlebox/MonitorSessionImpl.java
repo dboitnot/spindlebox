@@ -13,6 +13,7 @@ import javax.mail.*;
 import javax.mail.event.MessageCountAdapter;
 import javax.mail.event.MessageCountEvent;
 import java.lang.ref.WeakReference;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -64,6 +65,11 @@ public class MonitorSessionImpl implements MonitorSession {
 
             Properties prop = new Properties();
             prop.setProperty("mail.imap.starttls.enable", "true");
+
+            // Set timeouts
+            String timeout = String.valueOf(settings.getTimeout().orElse(Duration.ofSeconds(45)).toMillis());
+            prop.setProperty("mail.imap.connectiontimeout", timeout);
+            prop.setProperty("mail.imap.timeout", timeout);
 
             // Get a Session object
             Session session = Session.getDefaultInstance(prop, null);
@@ -163,7 +169,7 @@ public class MonitorSessionImpl implements MonitorSession {
 
     private void fakeIdle(Folder folder, long timeout) throws MessagingException {
         try {
-            long ivl = settings.getInboxPollingInterval().orElse(5000L);
+            long ivl = settings.getInboxPollingInterval().map(Duration::toMillis).orElse(5000L);
             long now = System.currentTimeMillis();
             long outTime = now + timeout;
             do {
@@ -175,7 +181,7 @@ public class MonitorSessionImpl implements MonitorSession {
     }
 
     private void idle(Folder folder) throws MessagingException {
-        long timeout = settings.getBoxHandlerPollingInterval().orElse(300000L);
+        long timeout = settings.getBoxHandlerPollingInterval().map(Duration::toMillis).orElse(300000L);
         if (supportsIdle.isPresent()) {
             // We've already tried to idle, so follow the previous result.
             if (supportsIdle.get()) realIdle(folder, timeout); else fakeIdle(folder, timeout);

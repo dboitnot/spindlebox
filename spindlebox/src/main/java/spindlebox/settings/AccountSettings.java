@@ -1,5 +1,6 @@
 package spindlebox.settings;
 
+import java.time.Duration;
 import java.util.Optional;
 
 /**
@@ -11,8 +12,9 @@ public interface AccountSettings {
     public Optional<String> getHost();
     public Optional<String> getUsername();
     public Optional<String> getInbox();
-    public Optional<Long> getInboxPollingInterval();
-    public Optional<Long> getBoxHandlerPollingInterval();
+    public Optional<Duration> getInboxPollingInterval();
+    public Optional<Duration> getBoxHandlerPollingInterval();
+    public Optional<Duration> getTimeout();
     public Optional<Boolean> isDebug();
 
     public default Optional<String> getStoredPassword() {
